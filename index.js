@@ -55,6 +55,26 @@ app.delete("/cars/:id", (req, res) => {
     }
 })
 
+// BE3.4_CW
+
+app.post("/cars/:id", (req, res) => {
+    const carId = parseInt(req.params.id)
+    const updatedCarData = req.body                           //    {id: 12, make: "Kia", model: "Sonet", year: 2021},
+
+    const carToUpdate = cars.find(car => car.id ===  carId)   //      {id: 12, make: "Kia", model: "Seltos", year: 2022},
+
+    if(!carToUpdate){
+        res.status(404).json({error: "Car not found."})
+    }else{
+        if(!updatedCarData.make || !updatedCarData.model || !updatedCarData.year){
+            res.status(400).json({error: "Make, model and year are required."})
+        }else{
+            Object.assign(carToUpdate, updatedCarData)
+            res.status(201).json({message: "Car data updated successfully", car: carToUpdate})
+        }
+    }
+})
+
 const PORT = 4000
 
 app.listen(PORT, () => {
